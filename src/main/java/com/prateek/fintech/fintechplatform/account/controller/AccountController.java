@@ -7,8 +7,11 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.UUID;
+
 @RestController
-@RequestMapping("/api/v1/accounts")
+@RequestMapping("/api/v1/customers")
 public class AccountController {
 
     private final AccountService accountService;
@@ -17,12 +20,19 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @PostMapping
+    @PostMapping("/{customerId}/accounts")
     @ResponseStatus(HttpStatus.CREATED)
     public AccountResponse createAccount(
+            @PathVariable UUID customerId,
             @Valid @RequestBody CreateAccountRequest request
     ) {
-        return accountService.createAccount(request);
+        return accountService.createAccount(customerId, request);
+    }
+    @GetMapping("/{customerId}/accounts")
+    public List<AccountResponse> getAccounts(
+            @PathVariable UUID customerId
+    ) {
+        return accountService.getAccountsByCustomer(customerId);
     }
 }
 // @RestController

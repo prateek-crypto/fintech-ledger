@@ -1,5 +1,6 @@
 package com.prateek.fintech.fintechplatform.account.entity;
 
+import com.prateek.fintech.fintechplatform.customer.entity.Customer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +8,9 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.UUID;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 // 🔥 MUST KNOW: Marks this class as a JPA entity.
@@ -126,4 +130,24 @@ public class Account {
     protected void onUpdate() {
         updatedAt = OffsetDateTime.now();
     }
+    // Concept: JPA entity relationship
+// Why: tells Hibernate that many Account records can belong to one Customer.
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 }
+
+// @ManyToOne
+//means:
+//Many Account objects
+//        ↓
+//One Customer object
+//This:
+//@JoinColumn(name = "customer_id")
+//tells Hibernate:
+//The relationship is stored using the customer_id column in the accounts table.
+//And this:
+//fetch = FetchType.LAZY
+//means:
+//Don't automatically load the Customer whenever I load an Account.
