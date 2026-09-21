@@ -1,60 +1,47 @@
 # FinTech Core Banking Platform
 
-An enterprise-oriented **Core Banking & Transaction Processing Platform** built with Java and Spring Boot.
+An enterprise-oriented Core Banking and Financial Transaction Platform built with Java and Spring Boot.
 
-This project is being developed as a long-term engineering project rather than a simple CRUD application. The goal is to gradually build a production-style financial backend covering account management, transactions, double-entry ledgering, fraud detection, asynchronous processing, security, observability, performance engineering, DevSecOps, containerization, Kubernetes, cloud deployment, caching, messaging, and AI-assisted capabilities.
+The project is being developed incrementally, with a focus on building the foundations of a real financial backend: customer and account management, transactional integrity, double-entry ledgering, fraud monitoring, performance optimization, observability, security, containerization, and eventually cloud deployment.
 
----
-
-## Why I'm Building This
-
-Most backend projects stop after:
-
-> Controller → Service → Repository → Database
-
-That is useful for learning, but real financial systems have much harder problems:
-
-- How do we prevent duplicate transactions?
-- How do we maintain financial consistency?
-- How do we handle concurrent updates?
-- How do we guarantee that money is not created or lost?
-- How do we recover from failures?
-- How do we process work asynchronously?
-- How do we detect suspicious transactions?
-- How does the system behave under heavy traffic?
-- How do we measure performance before and after optimization?
-- How do we secure the software supply chain?
-- How do we deploy and monitor the system in containers and Kubernetes?
-
-This project is my attempt to work through those problems incrementally and understand the engineering decisions behind them.
+The goal is not just to build REST APIs, but to understand how backend systems used in financial applications are designed, tested, secured, monitored, and optimized.
 
 ---
 
-# Current Status
+## Current Progress
 
-### Day 1 — Account Foundation
+### Day 1 — Project Foundation & Account Management
 
-**Status: Complete**
+The first day focused on getting the core backend infrastructure working and building the initial Account domain.
 
-The first milestone establishes the foundation of the platform:
+### What was completed
 
-- Spring Boot application setup
-- PostgreSQL integration
-- Flyway database migrations
-- Account domain model
-- Account REST API
-- Request validation
-- Global exception handling
-- Database constraints
-- Optimistic locking groundwork
-- Integration testing
-- Git/GitHub workflow
-- Reproducible JVM timezone configuration
+- Created the Spring Boot application using Java 17.
+- Configured PostgreSQL as the primary relational database.
+- Connected the application to a dedicated `fintech` PostgreSQL database.
+- Integrated Flyway for database schema versioning.
+- Configured Hibernate/JPA with `ddl-auto=validate` so that database schema changes remain controlled through Flyway.
+- Created the initial `accounts` database table.
+- Implemented the `Account` JPA entity.
+- Added account status handling using an enum.
+- Used `BigDecimal` for account balances instead of floating-point types because financial amounts require precise decimal representation.
+- Added UUID-based account identifiers.
+- Added timestamps for account creation and updates.
+- Added optimistic locking groundwork using `@Version`.
+- Created the Account repository using Spring Data JPA.
+- Implemented request and response DTOs so the API layer is separated from the database entity.
+- Added request validation.
+- Implemented the account creation service.
+- Implemented the REST endpoint for account creation.
+- Added centralized exception handling.
+- Added duplicate-account handling using both application-level validation and a database `UNIQUE` constraint.
+- Tested the API manually using Postman.
+- Verified that created accounts were persisted correctly in PostgreSQL.
+- Added automated integration testing using Spring Boot and MockMvc.
+- Fixed and documented the JVM/PostgreSQL timezone configuration issue.
+- Connected the project to GitHub.
 
-Automated tests:
+### Initial Account API
 
 ```text
-5 tests
-5 passed
-0 failures
-0 errors
+POST /api/v1/accounts
